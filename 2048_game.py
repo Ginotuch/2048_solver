@@ -8,14 +8,17 @@ Author: Ginotuch
 
 import os
 from time import sleep
+import random
 
 
 def main():
+    ## Commented out for testing
     # game_map = {}  # {3: [0, 0, 0, 0], 2: [0, 0, 0, 0], 1: [0, 0, 0, 0], 0: [0, 0, 0, 0]}
     # initialise_map_blank(game_map, 4)
     # choice = move_choice()
     # print(choice)
 
+    # Testing game map
     game_map = {
         3: [2, 0, 0, 0],
         2: [0, 0, 0, 0],
@@ -24,8 +27,31 @@ def main():
     print_current(game_map)
     input()
 
+    while True:  # Tests number generation
+        add_number = new_num(game_map)
+        if add_number is False:
+            print("Game Over")
+            break
+        print_current(game_map)
+        sleep(1)
+    input()
+
 
 def new_num(game_map):
+    empty_slots = []
+    for row in range(len(game_map.values())):
+        for slot in range(len(game_map[row])):
+            if game_map[row][slot] == 0:
+                empty_slots += [(slot, row)]
+    if len(empty_slots) < 1:
+        return False
+    if random.randrange(11) == 10:
+        random_num = 4
+    else:
+        random_num = 2
+    ran_num = (random_num, random.choice(empty_slots))  # creates a tuple with the random number, and random location
+    game_map[ran_num[1][1]][ran_num[1][0]] = ran_num[0]  # Adds the random number to the board
+
     pass
 
 
