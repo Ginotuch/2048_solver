@@ -12,18 +12,14 @@ import random
 
 
 def main():
-    ## Commented out for testing
     game_map = [{}, 0]  # [{3: [0, 0, 0, 0], 2: [0, 0, 0, 0], 1: [0, 0, 0, 0], 0: [0, 0, 0, 0]}, 0(score)]
     initialise_map_blank(game_map, 4)
-    # choice = move_choice()
-    # print(choice)
 
-    # Testing game map
-    # game_map = [{
-    #     3: [2, 0, 0, 2],
-    #     2: [2, 2, 2, 2],
-    #     1: [0, 89746, 0, 0],
-    #     0: [64, 4, 8, 8]}, 0]
+    # # Testing game map
+    # game_map = [{3: [0, 0, 0, 0],
+    #              2: [0, 0, 0, 0],
+    #              1: [0, 0, 0, 0],
+    #              0: [4, 0, 2, 2]}, 0]
     while True:
         print_current(game_map)
         move(move_choice(), game_map)
@@ -46,10 +42,58 @@ def move(direction, game_map):
         4: "right"
     }
     if direction == 1:  # up
-        pass
+        for item in range(len(game_map[0][0])):
+            for row in range(len(game_map[0])-1, -1, -1):
+                if game_map[0][row][item] != 0:
+                    end = False
+                    while not end:
+                        if row == 3:
+                            end = True
+                            break
+                        elif game_map[0][row + 1][item] == 0:
+                            game_map[0][row + 1][item] = game_map[0][row][item]
+                            game_map[0][row][item] = 0
+                            row += 1
+                            if row >= 3:
+                                end = True
+                                break
+
+                        elif game_map[0][row + 1][item] == game_map[0][row][item]:
+                            game_map[0][row + 1][item] = game_map[0][row + 1][item] * 2
+                            game_map[0][row][item] = 0
+                            score += game_map[0][row + 1][item]
+                            end = True
+                        else:
+                            end = True
+                        if row == -1 or row == 4 or item == -1 or item == 4:
+                            end = True
 
     elif direction == 2:  # down
-        pass
+        for item in range(len(game_map[0][0])):
+            for row in range(1, len(game_map[0])):
+                if game_map[0][row][item] != 0:
+                    end = False
+                    while not end:
+                        if row == 0:
+                            end = True
+                            break
+                        elif game_map[0][row - 1][item] == 0:
+                            game_map[0][row - 1][item] = game_map[0][row][item]
+                            game_map[0][row][item] = 0
+                            row -= 1
+                            if row <= 0:
+                                end = True
+                                break
+
+                        elif game_map[0][row - 1][item] == game_map[0][row][item]:
+                            game_map[0][row - 1][item] = game_map[0][row - 1][item] * 2
+                            game_map[0][row][item] = 0
+                            score += game_map[0][row - 1][item]
+                            end = True
+                        else:
+                            end = True
+                        if row == -1 or row == 4 or item == -1 or item == 4:
+                            end = True
 
     elif direction == 3:  # left
         for row in game_map[0].values():
@@ -64,25 +108,23 @@ def move(direction, game_map):
                             row[item - 1] = row[item]
                             row[item] = 0
                             item -= 1
+                            if item <= 0:
+                                end = True
+                                break
 
                         elif row[item - 1] == row[item]:
                             row[item - 1] = row[item - 1] * 2
                             row[item] = 0
-                            score += row[item - 1] * 2
+                            score += row[item - 1]
                             end = True
                         else:
                             end = True
-
-        empty_count = 0
-        for row in game_map[0].values():
-            for item in row:
-                if item == 0:
-                    empty_count += 1
+                        if row == -1 or row == 4 or item == -1 or item == 4:
+                            end = True
 
     elif direction == 4:  # right
         for row in game_map[0].values():
             for item in range(len(row) - 1, -1, -1):
-                print(item)
                 if row[item] != 0:
                     end = False
                     while not end:
@@ -93,13 +135,18 @@ def move(direction, game_map):
                             row[item + 1] = row[item]
                             row[item] = 0
                             item += 1
+                            if item >= 3:
+                                end = True
+                                break
 
                         elif row[item + 1] == row[item]:
                             row[item + 1] = row[item + 1] * 2
                             row[item] = 0
-                            score += row[item + 1] * 2
+                            score += row[item + 1]
                             end = True
                         else:
+                            end = True
+                        if row == -1 or row == 4 or item == -1 or item == 4:
                             end = True
     new_num(game_map)
     return score
