@@ -14,16 +14,16 @@ import random
 def main():
     game_map = [{}, 0]  # [{3: [0, 0, 0, 0], 2: [0, 0, 0, 0], 1: [0, 0, 0, 0], 0: [0, 0, 0, 0]}, 0(score)]
     initialise_map_blank(game_map, 4)
-    score = 0
 
     while True:
-        print_current(game_map, score)
+        print_current(game_map)
         if not movement_check(game_map):
             print("GAME OVER")
             input()
             break
-        score = move(move_choice(), game_map, score)
-        new_num(game_map)
+        moved = move(move_choice(), game_map)
+        if moved:
+            new_num(game_map)
 
 
 def movement_check(game_map):
@@ -64,7 +64,9 @@ def movement_check(game_map):
             else:
                 return False
 
-def move(direction, game_map, score):
+
+def move(direction, game_map):
+    moved = False
     directions = {
         1: "up",
         2: "down",
@@ -80,18 +82,20 @@ def move(direction, game_map, score):
                         if row == 3:
                             end = True
                             break
-                        elif game_map[0][row + 1][item] == 0:
+                        elif game_map[0][row + 1][item] == 0:  # Moved to new spot if the spot contains no numbers
                             game_map[0][row + 1][item] = game_map[0][row][item]
                             game_map[0][row][item] = 0
                             row += 1
+                            moved = True
                             if row >= 3:
                                 end = True
                                 break
 
-                        elif game_map[0][row + 1][item] == game_map[0][row][item]:
+                        elif game_map[0][row + 1][item] == game_map[0][row][item]:  # Adds two numbers and merges
                             game_map[0][row + 1][item] = game_map[0][row + 1][item] * 2
                             game_map[0][row][item] = 0
-                            score += game_map[0][row + 1][item]
+                            game_map[1] += game_map[0][row + 1][item]
+                            moved = True
                             end = True
                         else:
                             end = True
@@ -111,6 +115,7 @@ def move(direction, game_map, score):
                             game_map[0][row - 1][item] = game_map[0][row][item]
                             game_map[0][row][item] = 0
                             row -= 1
+                            moved = True
                             if row <= 0:
                                 end = True
                                 break
@@ -118,7 +123,8 @@ def move(direction, game_map, score):
                         elif game_map[0][row - 1][item] == game_map[0][row][item]:
                             game_map[0][row - 1][item] = game_map[0][row - 1][item] * 2
                             game_map[0][row][item] = 0
-                            score += game_map[0][row - 1][item]
+                            game_map[1] += game_map[0][row - 1][item]
+                            moved = True
                             end = True
                         else:
                             end = True
@@ -138,6 +144,7 @@ def move(direction, game_map, score):
                             row[item - 1] = row[item]
                             row[item] = 0
                             item -= 1
+                            moved = True
                             if item <= 0:
                                 end = True
                                 break
@@ -145,7 +152,8 @@ def move(direction, game_map, score):
                         elif row[item - 1] == row[item]:
                             row[item - 1] = row[item - 1] * 2
                             row[item] = 0
-                            score += row[item - 1]
+                            game_map[1] += row[item - 1]
+                            moved = True
                             end = True
                         else:
                             end = True
@@ -165,6 +173,7 @@ def move(direction, game_map, score):
                             row[item + 1] = row[item]
                             row[item] = 0
                             item += 1
+                            moved = True
                             if item >= 3:
                                 end = True
                                 break
@@ -172,13 +181,14 @@ def move(direction, game_map, score):
                         elif row[item + 1] == row[item]:
                             row[item + 1] = row[item + 1] * 2
                             row[item] = 0
-                            score += row[item + 1]
+                            game_map[1] += row[item + 1]
+                            moved = True
                             end = True
                         else:
                             end = True
                         if row == -1 or row == 4 or item == -1 or item == 4:
                             end = True
-    return score
+    return moved
 
 
 def new_num(game_map):
@@ -220,11 +230,11 @@ def initialise_map_blank(game_map, map_len):
     new_num(game_map)
 
 
-def print_current(game_map, score):
+def print_current(game_map):
     # print(".\n" * 20)
     os.system('cls' if os.name == 'nt' else 'clear')  # Clears console in windows/linux (This breaks when using PyCharm)
     print()
-    print("Score: ", score)
+    print("Score: ", game_map[1])
     print()
     # Finds longest number
     biggest = 0
