@@ -6,13 +6,11 @@ This is the game itself that the solver will use to play.
 Author: Ginotuch
 """
 
-import os
-from time import sleep
-import random
+from os import system, name
+from random import randrange, choice
 
 
 def main():
-    game_map = [{}, 0]  # [{3: [0, 0, 0, 0], 2: [0, 0, 0, 0], 1: [0, 0, 0, 0], 0: [0, 0, 0, 0]}, 0(score)]
     game_map = initialise_map_blank(4)
 
     while True:
@@ -199,11 +197,11 @@ def new_num(game_map):
                 empty_slots += [(slot, row)]
     if len(empty_slots) < 1:
         return False
-    if random.randrange(11) == 10:
+    if randrange(11) == 10:
         random_num = 4
     else:
         random_num = 2
-    ran_num = (random_num, random.choice(empty_slots))  # creates a tuple with the random number, and random location
+    ran_num = (random_num, choice(empty_slots))  # creates a tuple with the random number, and random location
     game_map[0][ran_num[1][1]][ran_num[1][0]] = ran_num[0]  # Adds the random number to the board
 
 
@@ -233,8 +231,7 @@ def initialise_map_blank(map_len):
 
 
 def print_current(game_map):
-    # print(".\n" * 20)
-    os.system('cls' if os.name == 'nt' else 'clear')  # Clears console in windows/linux (This breaks when using PyCharm)
+    system('cls' if name == 'nt' else 'clear')  # Clears console in windows/linux (This breaks when using PyCharm)
     print()
     print("Score: ", game_map[1])
     print()
@@ -261,7 +258,6 @@ def print_current(game_map):
     for x in range(len(game_map[0].keys())):
         print(x, " " * ((biggest - len(str(x))) - 1), end="  ")
     print()
-    sleep(0.1)
 
 
 def initialise_map_ran(game_map, map_len):

@@ -1,9 +1,11 @@
 import game
 from random import randrange
+from copy import deepcopy
+from time import sleep
 
 
 def main():
-    initial_map = game.initialise_map_blank(4)
+    game_map = game.initialise_map_blank(4)
     database = [
         {"mv": 1,
          "dead": False,
@@ -15,15 +17,29 @@ def main():
          "map": [{}, 0],
          "next": []}
     ]
+    history = [0]
+    highest_score = 0
+    tries = 200
     while True:
-        choices = [2,2,2,2,2,2,2,3,3,3,3,3,3,3,2,2,3,3,1,4,1,1,4,4]
-        game.move(choices[randrange(len(choices))], initial_map)
-        game.print_current(initial_map)
-        if not game.movement_check(initial_map):
+        if game_map == history[-1]:
+            direction = randrange(1, 5, 3)
+        else:
+            direction = randrange(2, 4)
+        game.move(direction, game_map)
+        history += [deepcopy(game_map)]
+        game.print_current(game_map)
+        if not game.movement_check(game_map):
+            if game_map[1] > highest_score:
+                highest_score = game_map[1]
             print("done")
-            input()
-            break
-        game.new_num(initial_map)
-
+            print("Saving stats and reinitialising board...")
+            game_map = game.initialise_map_blank(4)
+            print("restarting...")
+            sleep(0.5)
+            tries -= 1
+            if tries == 0:
+                break
+        game.new_num(game_map)
+    print("Out of 20 tries, the highest score was:", highest_score)
 
 main()
