@@ -1,5 +1,5 @@
 """
-2048 solver - 2048_game.py
+2048 solver - game.py
 ----
 This is the game itself that the solver will use to play.
 
@@ -13,7 +13,7 @@ import random
 
 def main():
     game_map = [{}, 0]  # [{3: [0, 0, 0, 0], 2: [0, 0, 0, 0], 1: [0, 0, 0, 0], 0: [0, 0, 0, 0]}, 0(score)]
-    initialise_map_blank(game_map, 4)
+    game_map = initialise_map_blank(4)
 
     while True:
         print_current(game_map)
@@ -221,13 +221,15 @@ def move_choice():
     return int(choice)
 
 
-def initialise_map_blank(game_map, map_len):
+def initialise_map_blank(map_len):
+    game_map = [{}, 0]
     count = map_len - 1
     for x in range(map_len):
         game_map[0][count] = [0] * map_len
         count -= 1
     new_num(game_map)
     new_num(game_map)
+    return game_map
 
 
 def print_current(game_map):
@@ -268,5 +270,5 @@ def initialise_map_ran(game_map, map_len):
         game_map[count] = [0] * map_len
         count -= 1
 
-
-main()
+if __name__ == "__main__":
+    main()
