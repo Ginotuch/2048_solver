@@ -14,27 +14,57 @@ import random
 def main():
     game_map = [{}, 0]  # [{3: [0, 0, 0, 0], 2: [0, 0, 0, 0], 1: [0, 0, 0, 0], 0: [0, 0, 0, 0]}, 0(score)]
     initialise_map_blank(game_map, 4)
-
-    # # Testing game map
-    # game_map = [{3: [0, 0, 0, 0],
-    #              2: [0, 0, 0, 0],
-    #              1: [0, 0, 0, 0],
-    #              0: [4, 0, 2, 2]}, 0]
-    while True:
-        print_current(game_map)
-        move(move_choice(), game_map)
-
-    # while True:  # Tests number generation
-    #     add_number = new_num(game_map)
-    #     if add_number is False:
-    #         print("Game Over")
-    #         break
-    #     print_current(game_map)
-    #     sleep(1)
-
-
-def move(direction, game_map):
     score = 0
+
+    while True:
+        print_current(game_map, score)
+        if not movement_check(game_map):
+            print("GAME OVER")
+            input()
+            break
+        score = move(move_choice(), game_map, score)
+        new_num(game_map)
+
+
+def movement_check(game_map):
+    for row in game_map[0].values():  # quick blank slot check
+        for item in row:
+            if item == 0:
+                return True
+
+    # Checks left/right
+    for row in range(len(game_map[0].values())):
+        for item in range(len(game_map[0][row])):
+            if 0 < item < 3:
+                if game_map[0][row][item] == game_map[0][row][item + 1] or game_map[0][row][item] == game_map[0][row][
+                            item - 1]:
+                    return True
+            elif item == 3:
+                if game_map[0][row][item] == game_map[0][row][item - 1]:
+                    return True
+            elif item == 0:
+                if game_map[0][row][item] == game_map[0][row][item + 1]:
+                    return True
+            else:
+                return False
+
+    # Checks up/down
+    for item in range(len(game_map[0][0])):
+        for row in range(len(game_map[0]) - 1, -1, -1):
+            if 0 < row < 3:
+                if game_map[0][row][item] == game_map[0][row + 1][item] or game_map[0][row][item] == \
+                        game_map[0][row - 1][item]:
+                    return True
+            elif row == 3:
+                if game_map[0][row][item] == game_map[0][row - 1][item]:
+                    return True
+            elif row == 0:
+                if game_map[0][row][item] == game_map[0][row + 1][item]:
+                    return True
+            else:
+                return False
+
+def move(direction, game_map, score):
     directions = {
         1: "up",
         2: "down",
@@ -43,7 +73,7 @@ def move(direction, game_map):
     }
     if direction == 1:  # up
         for item in range(len(game_map[0][0])):
-            for row in range(len(game_map[0])-1, -1, -1):
+            for row in range(len(game_map[0]) - 1, -1, -1):
                 if game_map[0][row][item] != 0:
                     end = False
                     while not end:
@@ -148,7 +178,6 @@ def move(direction, game_map):
                             end = True
                         if row == -1 or row == 4 or item == -1 or item == 4:
                             end = True
-    new_num(game_map)
     return score
 
 
@@ -188,13 +217,15 @@ def initialise_map_blank(game_map, map_len):
         game_map[0][count] = [0] * map_len
         count -= 1
     new_num(game_map)
+    new_num(game_map)
 
 
-def print_current(game_map):
+def print_current(game_map, score):
     # print(".\n" * 20)
     os.system('cls' if os.name == 'nt' else 'clear')  # Clears console in windows/linux (This breaks when using PyCharm)
     print()
-
+    print("Score: ", score)
+    print()
     # Finds longest number
     biggest = 0
     for row in game_map[0].values():
