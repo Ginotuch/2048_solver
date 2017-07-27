@@ -236,7 +236,7 @@ def print_current(game_map):
     print("Score: ", game_map[1])
     print()
     # Finds longest number
-    biggest = 0
+    biggest = 1
     for row in game_map[0].values():
         for item in row:
             if len(str(item)) > biggest:
@@ -256,7 +256,8 @@ def print_current(game_map):
     # Printing X index numbers
     print("     ", end="")
     for x in range(len(game_map[0].keys())):
-        print(x, " " * ((biggest - len(str(x))) - 1), end="  ")
+        spaces = " " * (biggest - len(str(x)) + 1)
+        print(x, spaces, end="")
     print()
 
 
