@@ -208,15 +208,24 @@ def new_num(game_map):
 def move_choice():
     choice = None
     while not choice:
-        temp_choice = input("1-up, 2-down, 3-left, 4-right: ")
+        temp_choice = input("1/W-up, 2/S-down, 3/A-left, 4/D-right: ")
         try:
             if int(temp_choice) not in range(1, 5):
                 print("fail")
         except ValueError:
+            if temp_choice.lower() in 'wasd':
+                if temp_choice.lower() == 'w':
+                    choice = 1
+                elif temp_choice.lower() == 'a':
+                    choice = 3
+                elif temp_choice.lower() == 's':
+                    choice = 2
+                elif temp_choice.lower() == 'd':
+                    choice = 4
             print("enter a number 1-4")
         else:
-            choice = temp_choice
-    return int(choice)
+            choice = int(temp_choice)
+    return choice
 
 
 def initialise_map_blank(map_len):
