@@ -52,7 +52,7 @@ def basic_solver(game_map, retries):
             direction = choice([2, 3])
         moved = game_map.move(direction)
         previous_move = deepcopy(game_map.game_map)
-        game_map.print_current(False)  # Commented out as it slows down the code a huge amount
+        # game_map.print_current(False)  # Commented out as it slows down the code a huge amount
         if not game_map.movement_check():
             count += 1
             if count % 20 == 0:
