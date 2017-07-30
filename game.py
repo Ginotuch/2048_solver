@@ -22,6 +22,12 @@ class GameMap:
         self.new_num()
         self.new_num()
 
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return self.__dict__ == other.__dict__
+        else:
+            return False
+
     def new_num(self):
         empty_slots = []
         for row in range(len(self.game_map[0])):
