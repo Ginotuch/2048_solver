@@ -43,10 +43,13 @@ class GameMap:
         ran_num = (random_num, choice(empty_slots))  # creates a tuple with the random number, and random location
         self.game_map[0][ran_num[1][1]][ran_num[1][0]] = ran_num[0]  # Adds the random number to the board
 
+    def score(self):
+        return self.game_map[1]
+
     def print_current(self, sleep_o):
         system('cls' if name == 'nt' else 'clear')  # Clears console in windows/linux (This breaks when using PyCharm)
         print()
-        print("Score: ", self.game_map[1])
+        print("Score: ", self.score())
         print()
         # Finds longest number
         biggest = 1
