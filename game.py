@@ -14,10 +14,8 @@ from time import sleep
 class GameMap:
     def __init__(self):
         game_map = [[], 0]
-        count = 3
         for x in range(4):
             game_map[0] += [[0] * 4]
-            count -= 1
         self.game_map = game_map
         self.new_num()
         self.new_num()
@@ -36,7 +34,7 @@ class GameMap:
                     empty_slots += [(slot, row)]
         if len(empty_slots) < 1:
             return False
-        if randrange(11) == 10:
+        if randrange(10) == 9:
             random_num = 4
         else:
             random_num = 2
@@ -118,12 +116,12 @@ class GameMap:
 
     def move(self, direction):
         moved = False
-        directions = {
-            1: "up",
-            2: "down",
-            3: "left",
-            4: "right"
-        }
+        # directions = {
+        #     1: "up",
+        #     2: "down",
+        #     3: "left",
+        #     4: "right"
+        # }
         if direction == 2:  # down
             for item in range(len(self.game_map[0][0])):
                 for row in range(len(self.game_map[0]) - 1, -1, -1):
