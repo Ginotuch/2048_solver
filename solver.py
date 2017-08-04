@@ -39,7 +39,7 @@ def basic_solver(game_map, retries):
             direction = choice([2, 3])
         moved = game_map.move(direction)
         moves += 1
-        #game_map.print_current(False)  # Commented out as it slows down the code a huge amount
+        # game_map.print_current(False)  # Commented out as it slows down the code a huge amount
         if moved:
             game_map.new_num()
             continue
