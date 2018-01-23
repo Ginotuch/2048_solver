@@ -19,7 +19,7 @@ from game import GameMap
 
 def main():
     game_map = GameMap()
-    basic_solver(game_map, 2000)
+    basic_solver(game_map, 1000)
 
 
 def basic_solver(game_map, retries):
@@ -29,6 +29,7 @@ def basic_solver(game_map, retries):
     moved = False
     start = time()
     moves = 0
+    total_moves = []
     while True:
         if not moved:
             temp = choice([(1, 2), (3, 4)])
@@ -39,7 +40,7 @@ def basic_solver(game_map, retries):
             direction = choice([2, 3])
         moved = game_map.move(direction)
         moves += 1
-        # game_map.print_current(False)  # Commented out as it slows down the code a huge amount
+        #game_map.print_current(True)  # Commented out as it slows down the code a huge amount
         if moved:
             game_map.new_num()
             continue
@@ -49,6 +50,8 @@ def basic_solver(game_map, retries):
                 print("Games complete:", count)
             past_scores += [game_map.score()]
             game_map = GameMap()
+            total_moves += [moves]
+            moves = 0
             games += 1
             if games == retries:
                 break
@@ -61,9 +64,11 @@ def basic_solver(game_map, retries):
     milliseconds = str(round(seconds - int(seconds), 3))[2:]
     seconds = int(seconds)
     time_string = str(hours) + ":" + str(minutes) + ":" + str(seconds) + ":" + str(milliseconds)
-    print("Time taken:", time_string)
-    print("Total moves:", moves)
-    print("Average score:", sum(past_scores) / len(past_scores))
+    print("\n\n\nTime taken:", time_string)
+    print("Average moves:", sum(total_moves) // len(total_moves))
+    print("Most moves:", max(total_moves))
+    print("Least moves:", min(total_moves))
+    print("Average score:", sum(past_scores) // len(past_scores))
     print("Out of", games, "games, the highest score was:", max(past_scores))
     print("Lowest score:", min(past_scores))
 

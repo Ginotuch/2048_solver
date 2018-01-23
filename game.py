@@ -122,7 +122,7 @@ class GameMap:
         #     3: "left",
         #     4: "right"
         # }
-        if direction == 2:  # down
+        if direction == 2:  # down (This used to be up, it's now down, I don't know why)
             for item in range(len(self.game_map[0][0])):
                 for row in range(len(self.game_map[0]) - 1, -1, -1):
                     if self.game_map[0][row][item] != 0:
